@@ -6,6 +6,6 @@ for i in {0..7}; do
     echo
     (gem5.opt -d m5out-$len-$step -r -e \
         /usr/local/src/gem5/configs/example/se.py \
-            --caches --l2cache \
+            --caches --l2cache --cache_line_sz=64 \
             -c cache-line.bin -o "$len $step" > /dev/null &)
 done
