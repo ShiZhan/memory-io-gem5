@@ -1,0 +1,12 @@
+#!/bin/bash
+[ -z $1 ] && dataset_length=$[ 1024*1024*64 ] || dataset_length=$1
+[ -z $2 ] && cacheline_size=64                || cacheline_size=$2
+[ -z $3 ] && step_max=7                       || step_max=$3
+for i in `seq 0 $step_max`; do
+    step=$[ 1 << $i ]
+    echo "--- data=$dataset_length, cacheline=$cacheline_size, step=$step ---"
+    (gem5.opt -d m5out-$dataset_length-$cacheline_size-$step -r -e \
+        /usr/local/src/gem5/configs/example/se.py                  \
+            --caches --l2cache --cacheline_size=$cacheline_size    \
+            -c cache-line.bin -o "$dataset_length $step" > /dev/null &)
+done
